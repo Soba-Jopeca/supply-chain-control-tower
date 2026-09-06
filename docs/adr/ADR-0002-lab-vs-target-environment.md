@@ -28,6 +28,9 @@ Mapeamento inicial:
 | Azure Monitor | `Demonstrated conceptually` — logs estruturados + tabelas de observabilidade próprias |
 | Power BI | `Implemented in lab` — conecta via Databricks SQL, mesmo endpoint usado em produção |
 | Terraform | `Demonstrated conceptually` — módulos escritos e documentados; execução real depende de credenciais de conta que o Free Edition não expõe (sem account console/API) |
+| Isolamento de ambiente (dev/test/prod) | `Demonstrated conceptually` — catalog dentro do mesmo workspace (`dev_scct`/`test_scct`/`prod_scct`) via Databricks Asset Bundle targets |
+
+**Isolamento de ambiente = catálogo, não workspace.** O Free Edition não oferece account console/API para provisionar múltiplos workspaces isolados (mesma limitação que já bloqueia Terraform real, ver linha acima). Os ambientes `dev`, `test` e `prod` descritos na Fase 17 do roadmap são implementados como catálogos distintos no mesmo Unity Catalog metastore, orquestrados pelos `targets` do `databricks.yml` (Fase 16). A sintaxe de `targets` é idêntica à de produção — `Implemented in lab` nesse aspecto — mas o isolamento físico de workspace (incluindo Private Link/VNet injection do ambiente corporativo) é `Target production implementation`.
 
 ## Alternatives
 
@@ -39,6 +42,7 @@ Mapeamento inicial:
 - Todo componente do projeto tem status de maturidade explícito e defensável em entrevista.
 - Quando o Azure trial for renovado (ou usado o ambiente da empresa), plugamos ADLS Gen2/ADF por cima sem redesenhar a lógica de Bronze/Silver/Gold.
 - Exige disciplina de sempre atualizar a tag quando um componente evoluir de "conceitual" para "implementado".
+- RBAC por catálogo dentro de um workspace único é mais frágil que RBAC por workspace: um usuário com acesso de leitura ao workspace pode enxergar a *existência* dos catálogos dev/test/prod mesmo sem grant nas tabelas. Isso deve ser tratado explicitamente na Fase 18 (Governance & Security), não tratado como bug do design.
 
 ## Status no ambiente de laboratório
 
