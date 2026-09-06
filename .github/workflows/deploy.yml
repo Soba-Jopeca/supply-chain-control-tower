@@ -1,0 +1,40 @@
+name: Deploy
+
+# Ver ADR-0002: no Free Edition não há múltiplos workspaces isolados nem account API,
+# então "test" e "prod" são catalogs/schemas separados dentro do mesmo workspace
+# (Demonstrated conceptually / Target production implementation quando aplicável).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Target do bundle (dev | test | prod)"
+        required: true
+        default: "dev"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Databricks CLI
+        uses: databricks/setup-cli@main
+
+      - name: Deploy bundle
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          TARGET="${{ github.event.inputs.target || 'dev' }}"
+          databricks bundle deploy -t "$TARGET"
+
+      - name: Run integration job (smoke test)
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          TARGET="${{ github.event.inputs.target || 'dev' }}"
+          databricks bundle run ingestion_job -t "$TARGET"

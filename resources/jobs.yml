@@ -1,0 +1,19 @@
+# Definição de Jobs do Databricks Asset Bundle.
+# Preencher a partir da Fase 11 (Orchestration) / Fase 16 (Asset Bundles).
+# Estrutura esperada (exemplo a ser detalhado):
+#
+# resources:
+#   jobs:
+#     ingestion_job:
+#       name: "[${bundle.target}] Ingestion - ERP/TMS/WMS/GPS/Assets"
+#       tasks:
+#         - task_key: ingest_erp
+#           notebook_task:
+#             notebook_path: ../pipelines/bronze/ingest_erp.py
+#         - task_key: ingest_tms
+#           depends_on: []
+#           notebook_task:
+#             notebook_path: ../pipelines/bronze/ingest_tms.py
+#       schedule:
+#         quartz_cron_expression: "0 0 6 * * ?"
+#         timezone_id: "America/Sao_Paulo"

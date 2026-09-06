@@ -1,0 +1,14 @@
+environment: prod
+catalog: supply_chain_prod
+schemas:
+  bronze: bronze
+  silver: silver
+  gold: gold
+data_generator:
+  volume_profile: large
+  seed: 42
+  months_of_history: 24
+risk_engine:
+  lead_time_hours: 6
+observability:
+  freshness_sla_hours: 24

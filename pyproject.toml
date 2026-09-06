@@ -1,0 +1,39 @@
+[project]
+name = "supply-chain-control-tower"
+version = "0.1.0"
+description = "Supply Chain Returnables Control Tower — plataforma de dados para risco operacional em transferências e ativos retornáveis"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pyspark>=3.5",
+    "delta-spark>=3.0",
+    "pydantic>=2.0",
+    "python-dateutil",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov",
+    "ruff>=0.6",
+    "pre-commit",
+    "faker>=25.0",
+]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

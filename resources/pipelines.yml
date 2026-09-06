@@ -1,0 +1,14 @@
+# Definição de Lakeflow Declarative Pipelines do Databricks Asset Bundle.
+# Preencher a partir da Fase 4 (Bronze) / Fase 5 (Silver).
+# Lembrete (ADR-0002 / Free Edition): apenas 1 pipeline ativo por tipo — planejar
+# consolidação de bronze/silver por domínio em vez de 1 pipeline por entidade.
+#
+# resources:
+#   pipelines:
+#     bronze_silver_pipeline:
+#       name: "[${bundle.target}] Bronze -> Silver"
+#       catalog: ${var.catalog}
+#       target: silver
+#       libraries:
+#         - notebook:
+#             path: ../pipelines/silver/build_silver.py

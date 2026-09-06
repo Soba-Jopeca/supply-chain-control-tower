@@ -1,0 +1,44 @@
+# Databricks Asset Bundle (Declarative Automation Bundle)
+# Referência: https://docs.databricks.com/dev-tools/bundles/
+bundle:
+  name: supply-chain-control-tower
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: Unity Catalog catalog usado pelo bundle
+    default: supply_chain_dev
+  data_volume_profile:
+    description: "Perfil de volumetria dos dados sintéticos: small | medium | large | stress"
+    default: small
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://<seu-workspace-free-edition>.cloud.databricks.com
+    variables:
+      catalog: supply_chain_dev
+      data_volume_profile: small
+
+  test:
+    mode: development
+    workspace:
+      host: https://<seu-workspace-free-edition>.cloud.databricks.com
+    variables:
+      catalog: supply_chain_test
+      data_volume_profile: medium
+
+  prod:
+    mode: production
+    workspace:
+      host: https://<seu-workspace-free-edition>.cloud.databricks.com
+    variables:
+      catalog: supply_chain_prod
+      data_volume_profile: large
+    # NOTE (ADR-0002): no Free Edition não há account console/API nem múltiplos workspaces,
+    # então "prod" aqui é demonstrado como catalog/schema separado dentro do mesmo workspace,
+    # não como ambiente fisicamente isolado (target production implementation).
